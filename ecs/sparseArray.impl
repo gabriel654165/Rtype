@@ -1,0 +1,161 @@
+#include "sparseArray.hpp"
+
+static const int MAX_ELEMENTS = 10000;
+
+template <typename T>
+sparseArray<T>::sparseArray()
+{
+    _data.reserve(MAX_ELEMENTS);
+}
+
+template <typename T>
+sparseArray<T>::sparseArray(sparseArray const &src)
+{
+    _data.reserve(MAX_ELEMENTS);
+    for (std::size_t i = 0; i < src.size(); i++)
+        _data[i] = src[i];
+}
+
+template <typename T>
+sparseArray<T>::sparseArray(sparseArray &&src) noexcept
+{
+    _data.reserve(MAX_ELEMENTS);
+    _data = std::move(src._data);
+}
+
+template <typename T>
+sparseArray<T>::~sparseArray()
+= default;
+
+template <typename T>
+sparseArray<T> &sparseArray<T>::operator=(sparseArray<T> const &src) 
+{
+    this->_data = src._data;
+    return *this;
+}
+
+template <typename T>
+sparseArray<T> &sparseArray<T>::operator=( sparseArray &&src) noexcept
+{
+    this->_data = src._data;
+    return *this;
+}
+
+template <typename T>
+typename sparseArray<T>::reference_type sparseArray<T>::operator[]( size_t idx )
+{
+    return _data[idx];
+}
+
+template <typename T>
+typename sparseArray<T>::const_reference_type sparseArray<T>::operator []( size_t idx ) const
+{
+    return _data[idx];
+}
+
+template <typename T>
+typename sparseArray<T>::iterator sparseArray<T>::begin ()
+{
+    return _data.begin();
+}
+
+template <typename T>
+typename sparseArray<T>::const_iterator sparseArray<T>::begin () const
+{
+    return _data.begin();
+}
+
+template <typename T>
+typename sparseArray<T>::const_iterator sparseArray<T>::cbegin () const
+{
+    return _data.cbegin();
+}
+
+template <typename T>
+typename sparseArray<T>::iterator sparseArray<T>::end ()
+{
+    return _data.end();
+}
+
+template <typename T>
+typename sparseArray<T>::const_iterator sparseArray<T>::end () const
+{
+    return _data.end();
+}
+
+template <typename T>
+typename sparseArray<T>::const_iterator sparseArray<T>::cend() const
+{
+    return _data.cend();
+}
+
+template <typename T>
+typename sparseArray<T>::size_type sparseArray<T>::size() const
+{
+    return _data.size();
+}
+
+template <typename T>
+typename sparseArray<T>::reference_type sparseArray<T>::insert_at(size_type pos, value_type const &value)
+{
+    if (pos && _data.size() == pos + 1)
+        _data.resize(pos * 2);
+    return *_data.insert(_data.begin() + pos, value);
+}
+
+template <typename T>
+typename sparseArray<T>::reference_type sparseArray<T>::insert_at(size_type pos , value_type &&value)
+{
+    if (pos && _data.size() == pos + 1)
+        _data.resize(pos * 2);
+    _data[pos] = value;
+    return _data[pos];
+}
+
+template<typename T>
+template <class... Params>
+typename sparseArray<T>::reference_type sparseArray<T>::emplace_back(Params &&... args)
+{
+    return (_data.template emplace_back(args...));
+}
+
+template<typename T>
+template <class... Params>
+typename sparseArray<T>::reference_type sparseArray<T>::emplace_at(size_type pos , Params &&... args)
+{
+    if (pos == size())
+        return emplace_back(args...);
+    else
+        return (*_data.template emplace(_data.begin() + pos, args...));
+}
+
+template <typename T>
+void sparseArray<T>::erase(size_type pos )
+{
+    _data.erase(_data.begin() + pos);
+}
+
+template <typename T>
+void sparseArray<T>::deactivateComponent(sparseArray<T>::size_type pos)
+{
+    _data[pos] = std::nullopt;
+}
+
+template <typename T>
+typename sparseArray<T>::size_type sparseArray<T>::get_index(value_type const &value) const
+{
+    size_t i = 0;
+
+    for (auto &n: _data) {
+        if (std::addressof(*value) == std::addressof(*n))
+            return reinterpret_cast<size_type>(i);
+        ++i;
+    }
+    throw(std::invalid_argument("Value not found in sparseArray"));
+}
+
+template<typename T>
+typename sparseArray<T>::size_type sparseArray<T>::numberOfElements() const
+{
+    return std::count_if(_data.begin(), _data.end(), [](std::optional<T> a){return a.has_value();});
+}

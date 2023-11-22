@@ -1,0 +1,18 @@
+[requires]
+boost/1.77.0
+sfml/2.5.1
+
+
+[generators]
+cmake_find_package
+cmake
+
+[options]
+boost:shared=False
+sfml:shared=False
+#*:shared=True
+
+[imports]
+res, * -> ./bin/res
+bin, *.dll -> ./bin
+lib, *.so* -> ./bin

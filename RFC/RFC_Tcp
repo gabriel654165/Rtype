@@ -1,0 +1,78 @@
+
+Rtype Working Group                                             M. Dodin
+Request for Comments: 2223                                       T. Itel
+Obsoletes: 1543, 1111, 825                                 E. Sengeissen
+Category: Information                                       G. Medoukali
+                                                            November 2021
+
+
+                        TCP Protocol Explanation
+
+Res : is for response packet
+Req : is for request packet
+Notify : if for notify client
+
+ResConnectionEstablished [200] : Server send to incoming connection
+approved to connect.
+
+ReqDisconnect [201] : Client ask to server to disconnect.
+
+ReqDisconnectedBySignal [202] : Client send a packet before disconnect by
+signal.
+
+ResDisconnected [203] : Server send disconnection approved to client.
+
+ReqConnectToLobby [204] : Client ask server to connect him to lobby.
+
+ResConnectedToLobby [205] : Server send connection approvment to client.
+
+NotifyConnectedToLobby [206] : Server notify all client that someone
+connected to lobby.
+
+ResErrorConnectionToLobby [207] : Server send disapproval code to client
+trying to connect to lobby.
+
+ReqDisconnectFromLobby [208] : Client ask server to disconnect him from
+lobby.
+
+ResDisconnectedFromLobby [209] : Server disconnect client from lobby.
+
+NotifyDisconnectedFromLobby [210] : Server notify all that client
+disconnected from lobby.
+
+ReqCreateLobby [211] : Client ask server to create a new lobby.
+
+ResLobbyCreated [212] : Server send to client creation approvment.
+
+NotifyLobbyCreated [213] : Server notify all that client create lobby.
+
+NotifyLobbyDeleted [214] : Server notify all that lobby get deleted.
+
+ReqReadyToPlay [215] : Client send to server that he is ready to play.
+
+ReqNotReadyToPlay [216] : Client send to server that he is not ready to play.
+
+ResReadyToPlay [217] : Server send to client that he is ready to play.
+
+ResNotReadyToPlay [218] : Server send to client that he is not ready to play.
+
+NotifyReadyToPlay [219] : Server notify all that client is ready to play in
+lobby.
+
+NotifyNotReadyToPlay [220] : Server notify all that client is not ready to
+play in lobby.
+
+NotifyStartGame [221] : Server send to all that lobby start game.
+
+ResError [222] : logical error send by server.
+
+ResAddYourSpaceship [224] : Server send to client his spaceship id when game
+start.
+
+ResAddASpaceship [225] : Server send to all client spaceship id's when game
+start.
+
+ReqAskForInfo [226] : Client send to server request for info on all lobby
+when connected.
+
+ResAskForInfo [227] : Server send to client all lobby's info.

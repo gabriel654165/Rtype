@@ -1,0 +1,49 @@
+Rtype Working Group                                             M. Dodin
+Request for Comments: 2223                                       T. Itel
+Obsoletes: 1543, 1111, 825                                 E. Sengeissen
+Category: Information                                       G. Medoukali
+                                                            November 2021
+
+                        UDP Protocol Explanation
+
+
+			FORMAT :
+
+Protocol for each messages
+Each packet are structured like this :
+
+[Header]
+  - type : is the type of packet sended/received 
+  - lenthBody : is the lenght of the array (in the body in order to unpack it)
+[Body]
+  - list : is the body of the messages (differents for each header type)
+
+
+We have 3 differents header type :
+- typeHeader 0 -> MovePositions
+- typeHeader 1 -> Spawn/Kill entity
+- typeHeader 2 -> GameEvent
+
+
+
+			FIELDS
+
+The body is different for each message type sended :
+
+Body for MovePositions :
+  [0] = posX, [1] = posY, [2] = entity uuid
+
+Body for Spawn/Kill entity :
+  [0] = type of enity spawned or killed,
+    - 1 : spawn a new entity by the uuid sended
+    - 2 : disable a entity in the scene in order to not draw it
+    - 3 : spawn a new monster (load form .so) by uuid
+    - 4 : kill a entity by the uuid	sended
+  [1] = the uuid of the target entity
+
+Body for GameEvent :
+  [0] = type of event
+    - 1 : directions of a entity by uuid
+  [1] : x movement (1 for left, 2 for right)
+  [2] : y movement (1 for down, 2 for down)
+  [3] = the uuid of the target entity
